@@ -28,7 +28,7 @@ class DiscordRpcService:
             try:
                 await self.discord.connect()
             except Exception as e:
-                logger.error("%s: Reconnect error.")
+                logger.error("%s: Reconnect error." % e)
         else:
             return
 
@@ -89,17 +89,20 @@ class DiscordRpcService:
         if state == State.stopped:
             activity['state'] = "%s" % state_name
         else:
-            activity['state'] = "%s [%s/%s]" % (state_name, position, duration)
+            position_str = self.format_time(position)
+            duration_str = self.format_time(duration)
+            activity['state'] = "%s [%s/%s]" % (state_name, position_str, duration_str)
 
         if duration is not None:
             remaining = duration - position
             end_time = time.time() + remaining
             activity['timestamps'] = {
+                'start': time.time() - position,
                 'end': end_time
             }
         else:
             activity['timestamps'] = {
-                'start': time.time()
+                'start': time.time() - position
             }
 
         activity['assets'] = {'large_text': 'FeelUOwn',
@@ -110,3 +113,13 @@ class DiscordRpcService:
             logger.debug('Syncing discord status.')
             await self.discord.set_activity(activity)
             self.last_activity = activity
+
+    def format_time(self, seconds):
+        seconds = int(seconds)
+        if seconds > 60:
+            minutes = str(int(seconds / 60))
+            seconds -= str(int(minutes * 60))
+        else:
+            minutes = "0"
+            seconds = str(seconds)
+        return "%s:%s" % (minutes.zfill(2), seconds.zfill(2))
