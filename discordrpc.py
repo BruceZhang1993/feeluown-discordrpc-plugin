@@ -117,9 +117,8 @@ class DiscordRpcService:
     def format_time(self, seconds):
         seconds = int(seconds)
         if seconds > 60:
-            minutes = str(int(seconds / 60))
-            seconds -= str(int(minutes * 60))
+            minutes = int(seconds / 60)
+            seconds = seconds - int(minutes * 60)
         else:
-            minutes = "0"
-            seconds = str(seconds)
-        return "%s:%s" % (minutes.zfill(2), seconds.zfill(2))
+            minutes = 0
+        return "%s:%s" % (str(minutes).zfill(2), str(seconds).zfill(2))
