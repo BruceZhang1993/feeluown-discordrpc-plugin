@@ -25,7 +25,7 @@ OP_PONG = 4
 JSON = Dict[str, Any]
 Reply = Tuple[int, JSON]
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('feeluown')
 
 
 class DiscordRpcError(Exception):

@@ -7,6 +7,7 @@ from typing import Dict, Optional
 
 from PyQt5.QtCore import QThread
 from fuocore.core.player import State
+from quamash import QThreadExecutor
 
 from .service.async import AsyncDiscordRpc, DiscordRpcError, JSON
 
@@ -16,12 +17,19 @@ logger = logging.getLogger('feeluown')
 class DiscordRpcService:
 
     last_activity: Optional[JSON] = None
-    max_retries = 5
 
-    def __init__(self, discord: AsyncDiscordRpc, app):
+    def __init__(self, discord: AsyncDiscordRpc, app, config):
         super().__init__()
         self._app = app
         self.discord = discord
+        self.config = config
+
+        # TODO: Binding events
+        self._app.player.stateChanged.connect(self._tick_once)
+        self._app.player.signal_player_song_changed.connect(self._tick_once)
+
+    def _tick_once(self, *args, **kwargs):
+        asyncio.ensure_future(self.tick())
 
     async def try_reconnect(self):
         if not self.discord.connected:
@@ -40,11 +48,11 @@ class DiscordRpcService:
                 await self.discord.connect()
             except DiscordRpcError:
                 logger.warning("Failed to connect to discord client")
-                await asyncio.sleep(1)
+                await asyncio.sleep(self.config.get('RECONNECT_DELAY'))
                 continue
             except Exception as err:
                 logger.warning("%s" % err)
-                await asyncio.sleep(1)
+                await asyncio.sleep(self.config.get('RECONNECT_DELAY'))
                 continue
             else:
                 break
@@ -56,10 +64,10 @@ class DiscordRpcService:
             try:
                 await self.tick()
             except Exception as err:
-                logger.warning("%s: Trying reconnecting..." % err)
+                logger.warning("%s: Reconnecting..." % err)
             finally:
                 await self.try_reconnect()
-            await asyncio.sleep(10)
+            await asyncio.sleep(self.config.get('INTERVAL'))
 
     async def tick(self) -> None:
         player = self._app.player
@@ -67,12 +75,10 @@ class DiscordRpcService:
         current_song = player.current_song
 
         if current_song:
-            length = current_song.length
             title = current_song.title
             artists = current_song.artists_name
         else:
-            length = '0'
-            title = 'Waiting...'
+            title = '...'
             artists = '...'
         position = player.player.position
         duration = player.player.duration
@@ -85,7 +91,11 @@ class DiscordRpcService:
         else:
             state_name = '停止播放'
 
-        activity['details'] = "%s - %s" % (title, artists)
+        if current_song:
+            activity['details'] = "%s - %s" % (title, artists)
+        else:
+            activity['details'] = "空闲中"
+
         if state == State.stopped:
             activity['state'] = "%s" % state_name
         else:
@@ -114,7 +124,10 @@ class DiscordRpcService:
             await self.discord.set_activity(activity)
             self.last_activity = activity
 
-    def format_time(self, seconds):
+    @staticmethod
+    def format_time(seconds):
+        if seconds is None:
+            return "00:00"
         seconds = int(seconds)
         if seconds > 60:
             minutes = int(seconds / 60)

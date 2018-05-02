@@ -21,7 +21,7 @@ OP_CLOSE = 2
 OP_PING = 3
 OP_PONG = 4
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('feeluown')
 
 
 class DiscordRpcError(Exception):
