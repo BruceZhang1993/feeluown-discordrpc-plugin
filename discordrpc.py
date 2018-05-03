@@ -25,8 +25,8 @@ class DiscordRpcService:
         self.config = config
 
         # TODO: Binding events
-        self._app.player.stateChanged.connect(self._tick_once)
-        self._app.player.signal_player_song_changed.connect(self._tick_once)
+        # self._app.player.stateChanged.connect(self._tick_once)
+        # self._app.player.signal_player_song_changed.connect(self._tick_once)
 
     def _tick_once(self, *args, **kwargs):
         asyncio.ensure_future(self.tick())
