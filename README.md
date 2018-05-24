@@ -1,7 +1,7 @@
 # FeelUOwn Discord Rich Presence
 这是一个实现 Discord RPC Rich Precense 服务的 FeelUOwn 插件
 
-### What are these
+### 关于 What are these
 - [What is Discord](https://discordapp.com/)
 - [What is Rich Precense](https://discordapp.com/rich-presence)
 - [What is FeelUOwn](https://github.com/cosven/FeelUOwn)
@@ -15,7 +15,7 @@
 git clone https://github.com/BruceZhang1993/feeluown-discordrpc-plugin.git
 ```
 
-### 插件更新
+### 插件更新 Upgrade
 
 ```shell
 cd $HOME/.FeelUOwn/plugins/feeluown-discordrpc-plugin
@@ -34,7 +34,8 @@ git pull origin master
 - 与插件有关建议与反馈请发 Issue
 - 与 FeelUOwn 本体有关建议与反馈请前往 [FeelUOwn Issue](https://github.com/cosven/FeelUOwn/issues)
 
-### 开源协议 LICENSE
+### 开源协议 License
 
 FeelUOwn Discord Rich Presence Plugin: [MIT](https://github.com/BruceZhang1993/feeluown-discordrpc-plugin/blob/master/LICENSE)
+
 FeelUOwn: [GPL3](https://github.com/cosven/FeelUOwn/blob/master/LICENSE)
