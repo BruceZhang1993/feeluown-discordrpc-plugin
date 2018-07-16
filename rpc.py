@@ -1,9 +1,10 @@
+# *-- coding: utf-8 --*
 # References:
+# * https://github.com/devsnek/discord-rpc/tree/master/src/transports/IPC.js
+# * https://github.com/devsnek/discord-rpc/tree/master/example/main.js
 # * https://github.com/discordapp/discord-rpc/tree/master/documentation/hard-mode.md
 # * https://github.com/discordapp/discord-rpc/tree/master/src
 # * https://discordapp.com/developers/docs/rich-presence/how-to#updating-presence-update-presence-payload-fields
-# * https://github.com/devsnek/discord-rpc/tree/master/src/transports/IPC.js
-# * https://github.com/devsnek/discord-rpc/tree/master/example/main.js
 
 from abc import ABCMeta, abstractmethod
 import json
@@ -14,23 +15,21 @@ import sys
 import struct
 import uuid
 
-
 OP_HANDSHAKE = 0
 OP_FRAME = 1
 OP_CLOSE = 2
 OP_PING = 3
 OP_PONG = 4
 
-logger = logging.getLogger('feeluown')
+logger = logging.getLogger(__name__)
 
 
-class DiscordRpcError(Exception):
+class DiscordIpcError(Exception):
     pass
 
 
-class DiscordRpc(metaclass=ABCMeta):
-
-    """Work with an open Discord instance via its JSON IPC for its rich presence.
+class DiscordIpcClient(metaclass=ABCMeta):
+    """Work with an open Discord instance via its JSON IPC for its rich presence API.
 
     In a blocking way.
     Classmethod `for_platform`
@@ -48,9 +47,9 @@ class DiscordRpc(metaclass=ABCMeta):
     @classmethod
     def for_platform(cls, client_id, platform=sys.platform):
         if platform == 'win32':
-            return WinDiscordRpc(client_id)
+            return WinDiscordIpcClient(client_id)
         else:
-            return UnixDiscordRpc(client_id)
+            return UnixDiscordIpcClient(client_id)
 
     @abstractmethod
     def _connect(self):
@@ -104,19 +103,11 @@ class DiscordRpc(metaclass=ABCMeta):
     def __exit__(self, *_):
         self.close()
 
-    def send_recv(self, data, *, op=OP_FRAME):
-        nonce = data.get('nonce')
-        self.send(data, op=op)
-        while True:
-            # TODO timeout
-            reply = self.recv()
-            if reply[1].get('nonce') == nonce:
-                return reply
-            else:
-                logger.warning("received unexpected reply; %s", reply)
-        return
+    def send_recv(self, data, op=OP_FRAME):
+        self.send(data, op)
+        return self.recv()
 
-    def send(self, data, *, op=OP_FRAME):
+    def send(self, data, op=OP_FRAME):
         logger.debug("sending %s", data)
         data_str = json.dumps(data, separators=(',', ':'))
         data_bytes = data_str.encode('utf-8')
@@ -136,25 +127,17 @@ class DiscordRpc(metaclass=ABCMeta):
         return op, data
 
     def set_activity(self, act):
+        # act
         data = {
             'cmd': 'SET_ACTIVITY',
             'args': {'pid': os.getpid(),
                      'activity': act},
             'nonce': str(uuid.uuid4())
         }
-        return self.send_recv(data)
-
-    def clear_activity(self):
-        data = {
-            'cmd': 'SET_ACTIVITY',
-            'args': {'pid': os.getpid()},
-            'nonce': str(uuid.uuid4())
-        }
-        return self.send_recv(data)
+        self.send(data)
 
 
-class WinDiscordRpc(DiscordRpc):
-
+class WinDiscordIpcClient(DiscordIpcClient):
     _pipe_pattern = R'\\?\pipe\discord-ipc-{}'
 
     def _connect(self):
@@ -167,7 +150,7 @@ class WinDiscordRpc(DiscordRpc):
             else:
                 break
         else:
-            return DiscordRpcError("Failed to connect to Discord pipe")
+            return DiscordIpcError("Failed to connect to Discord pipe")
 
         self.path = path
 
@@ -182,7 +165,7 @@ class WinDiscordRpc(DiscordRpc):
         self._f.close()
 
 
-class UnixDiscordRpc(DiscordRpc):
+class UnixDiscordIpcClient(DiscordIpcClient):
 
     def _connect(self):
         self._sock = socket.socket(socket.AF_UNIX)
@@ -199,7 +182,7 @@ class UnixDiscordRpc(DiscordRpc):
             else:
                 break
         else:
-            return DiscordRpcError("Failed to connect to Discord pipe")
+            return DiscordIpcError("Failed to connect to Discord pipe")
 
     @staticmethod
     def _get_pipe_pattern():

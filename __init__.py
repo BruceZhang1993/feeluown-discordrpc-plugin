@@ -1,32 +1,25 @@
-#!/usr/bin/env python3
-# *-- coding: utf-8 --
-import asyncio
+# *-- coding: utf-8 --*
 import logging
-from .discordrpc import DiscordRpcService
-from .service.async import AsyncDiscordRpc
 
-__alias__ = 'Discord RPC'
-__version__ = '0.0.1'
-__desc__ = "A plugin to enable discord rich presence."
-logger = logging.getLogger('feeluown')
+from feeluown_discordrpc.discord import Discord
 
-# Configuration
-config = {
-    'CLIENT_ID': '439097970391121930',
-    'INTERVAL': 5,
-    'RECONNECT_DELAY': 10,
-}
+__alias__ = 'Discord Rich Presence'
+__version__ = '2.0.1'
+__feeluown_version__ = '2.0.0'
+__desc__ = 'Discord RPC Rich Presence Support.'
 
-
-async def run_discordrpc(app):
-    async with AsyncDiscordRpc.for_platform(config.get('CLIENT_ID')) as discord:
-        await DiscordRpcService(discord, app, config).run()
+logger = logging.getLogger(__name__)
+loader: Discord = None
 
 
 def enable(app):
-    asyncio.ensure_future(run_discordrpc(app))
-    logger.debug('FeelUOwn Discord Plugin Enabled.')
+    global loader
+    loader = Discord(app)
+    loader.subscribe()
+    logger.info(__alias__ + ' enabled.')
 
 
 def disable(app):
-    logger.debug("FeelUOwn Discord Plugin Disabled.")
+    global loader
+    loader.unsubscribe()
+    logger.info(__alias__ + ' disabled.')

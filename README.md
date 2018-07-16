@@ -1,4 +1,4 @@
-# FeelUOwn Discord Rich Presence
+# FeelUOwn Discord Rich Presence (For FeelUOwn v2.x)
 这是一个实现 Discord RPC Rich Precense 服务的 FeelUOwn 插件
 
 ### 关于 What are these
