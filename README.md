@@ -12,13 +12,13 @@
 2. 打开 Linux 终端并 `cd $HOME/.FeelUOwn/plugins`
 3. 安装插件 master 分支开发版
 ```shell
-git clone https://github.com/BruceZhang1993/feeluown-discordrpc-plugin.git
+git clone https://github.com/BruceZhang1993/feeluown-discordrpc-plugin.git feeluown_discordrpc
 ```
 
 ### 插件更新 Upgrade
 
 ```shell
-cd $HOME/.FeelUOwn/plugins/feeluown-discordrpc-plugin
+cd $HOME/.FeelUOwn/plugins/feeluown_discordrpc
 git pull origin master
 ```
 
