@@ -17,6 +17,7 @@ class Discord(QObject):
 
     activity: dict = {}
     last_position = 0
+    _rpc = None
 
     def __init__(self, app):
         super().__init__(parent=app)
@@ -26,14 +27,17 @@ class Discord(QObject):
     async def _ensure_connect(self):
         while not self._rpc:
             await asyncio.sleep(30)
-            self._rpc._connect()
-            self._rpc._do_handshake()
+            try:
+                self._connect()
+                self.handle_forever()
+            except Exception as e:
+                pass
 
     def _connect(self):
         try:
             logger.debug('Discord Connecting...')
             self._rpc = DiscordIpcClient.for_platform(CLIENT_ID)
-        except DiscordIpcError as e:
+        except Exception as e:
             raise e
 
     def subscribe(self):
@@ -41,9 +45,9 @@ class Discord(QObject):
             self._connect()
             logger.info('Discord Connected.')
             self.handle_forever()
-        except DiscordIpcError as e:
+        except Exception as e:
             logger.warning('Discord Connection Failed: %s' % e)
-            self._ensure_connect()
+            asyncio.ensure_future(self._ensure_connect())
 
     def handle_forever(self):
         self._player.state_changed.connect(self.set_activity)

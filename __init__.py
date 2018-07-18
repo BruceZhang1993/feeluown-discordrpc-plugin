@@ -4,7 +4,7 @@ import logging
 from feeluown_discordrpc.discord import Discord
 
 __alias__ = 'Discord Rich Presence'
-__version__ = '2.0.1'
+__version__ = '0.0.1'
 __feeluown_version__ = '2.0.0'
 __desc__ = 'Discord RPC Rich Presence Support.'
 
