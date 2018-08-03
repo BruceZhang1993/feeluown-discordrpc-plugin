@@ -3,7 +3,7 @@ import logging
 import asyncio
 import time
 
-from fuocore.core.player import MpvPlayer as Player, State
+from fuocore.player import MpvPlayer as Player, State
 from fuocore.models import SongModel
 from PyQt5.QtCore import QObject
 from feeluown_discordrpc.rpc import DiscordIpcClient, DiscordIpcError
