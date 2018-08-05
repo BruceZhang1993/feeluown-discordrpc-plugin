@@ -3,6 +3,7 @@ import logging
 import asyncio
 import time
 
+from feeluown.app import CliApp
 from fuocore.player import MpvPlayer as Player, State
 from fuocore.models import SongModel
 from PyQt5.QtCore import QObject
@@ -20,7 +21,10 @@ class Discord(QObject):
     _rpc = None
 
     def __init__(self, app):
-        super().__init__(parent=app)
+        if app.mode & app.GuiMode:
+            super().__init__(parent=app)
+        else:
+            super().__init__(parent=None)
         self._app = app
         self._player: Player = self._app.player
 
