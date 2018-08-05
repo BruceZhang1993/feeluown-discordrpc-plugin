@@ -45,8 +45,11 @@ class Discord(QObject):
             raise e
 
     def subscribe(self):
+        asyncio.ensure_future(self._subscribe())
+
+    async def _subscribe(self):
         try:
-            self._connect()
+            await self._connect()
             logger.info('Discord Connected.')
             self.handle_forever()
         except Exception as e:
