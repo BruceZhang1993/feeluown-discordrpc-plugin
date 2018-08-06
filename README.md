@@ -8,14 +8,32 @@
 
 ### 食用攻略 Usage
 
+#### Git Version -- Recommand  
+
 1. 安装并第一次运行 FeelUOwn, 初始化文件夹
 2. 打开 Linux 终端并 `cd $HOME/.FeelUOwn/plugins`
-3. 安装插件 master 分支开发版
+3. 安装插件 v2.x 分支开发版
+
 ```shell
 git clone https://github.com/BruceZhang1993/feeluown-discordrpc-plugin.git feeluown_discordrpc
 ```
 
+#### Release Version
+
+1. 安装并第一次运行 FeelUOwn, 初始化文件夹
+2. 下载插件 [Release 版本](https://github.com/BruceZhang1993/feeluown-discordrpc-plugin/releases/tag/v0.0.1)
+
+```shell
+# Using wget
+cd /tmp
+wget https://github.com/BruceZhang1993/feeluown-discordrpc-plugin/archive/v0.0.1.tar.gz
+tar zxvf v0.0.1.tar.gz
+cp -r ./feeluown-discordrpc-plugin-0.0.1 $HOME/.FeelUOwn/plugins/feeluown-discordrpc-plugin
+```
+
 ### 插件更新 Upgrade
+
+#### Git Version  
 
 ```shell
 cd $HOME/.FeelUOwn/plugins/feeluown_discordrpc
