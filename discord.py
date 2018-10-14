@@ -49,7 +49,8 @@ class Discord(QObject):
 
     async def _subscribe(self):
         try:
-            await self._connect()
+            loop = asyncio.get_event_loop()
+            await loop.run_in_executor(None, self._connect)
             logger.info('Discord Connected.')
             self.handle_forever()
         except Exception as e:
@@ -57,6 +58,7 @@ class Discord(QObject):
             asyncio.ensure_future(self._ensure_connect())
 
     def handle_forever(self):
+        logger.debug('_______handled_forever_______')
         self._player.state_changed.connect(self.set_activity)
         self._player.media_changed.connect(self.set_activity)
         self._player.position_changed.connect(self.position_handler)
