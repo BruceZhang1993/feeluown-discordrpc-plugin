@@ -13,7 +13,6 @@ logger = logging.getLogger(__name__)
 
 CLIENT_ID = '439097970391121930'
 
-
 class Discord(QObject):
 
     activity: dict = {}
@@ -109,8 +108,8 @@ class Discord(QObject):
             remaining = self._player.duration - self._player.position
             endtime = time.time() + remaining
             activity['timestamps'] = {
-                'start': time.time() - self._player.position,
-                'end': endtime
+                'start': int(time.time() - self._player.position),
+                'end': int(endtime)
             }
         else:
             activity['timestamps'] = {
