@@ -68,4 +68,7 @@ fabric.properties
 *.iml
 out
 gen
-将删除 .idea/vcs.xml
+Pipfile
+Pipfile.lock
+FeelUOwn
+feeluown-core

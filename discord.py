@@ -7,14 +7,14 @@ from feeluown.app import CliApp
 from fuocore.player import MpvPlayer as Player, State
 from fuocore.models import SongModel
 from PyQt5.QtCore import QObject
-from feeluown_discordrpc.rpc import DiscordIpcClient, DiscordIpcError
+from .rpc import DiscordIpcClient, DiscordIpcError
 
 logger = logging.getLogger(__name__)
 
 CLIENT_ID = '439097970391121930'
 
-class Discord(QObject):
 
+class Discord(QObject):
     activity: dict = {}
     last_position = 0
     _rpc = None
@@ -54,7 +54,7 @@ class Discord(QObject):
             self.handle_forever()
         except Exception as e:
             logger.warning('Discord Connection Failed: %s' % e)
-            asyncio.ensure_future(self._ensure_connect())
+            await asyncio.ensure_future(self._ensure_connect())
 
     def handle_forever(self):
         logger.debug('_______handled_forever_______')

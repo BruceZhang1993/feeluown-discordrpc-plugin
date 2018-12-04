@@ -1,7 +1,7 @@
 # *-- coding: utf-8 --*
 import logging
 
-from feeluown_discordrpc.discord import Discord
+from .discord import Discord
 
 __alias__ = 'Discord Rich Presence'
 __version__ = '0.0.1'
