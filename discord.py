@@ -3,11 +3,10 @@ import logging
 import asyncio
 import time
 
-from feeluown.app import CliApp
 from fuocore.player import MpvPlayer as Player, State
 from fuocore.models import SongModel
 from PyQt5.QtCore import QObject
-from .rpc import DiscordIpcClient, DiscordIpcError
+from .rpc import DiscordIpcClient
 
 logger = logging.getLogger(__name__)
 
@@ -78,7 +77,9 @@ class Discord(QObject):
         if current_song:
             title = current_song.title
             artists = current_song.artists_name
-            activity['details'] = "%s - %s" % (title, artists)
+            source_name_map = {p.identifier: p.name for p in self._app.library.list()}
+            source_name = source_name_map.get(current_song.source) or ''
+            activity['details'] = "%s - %s (%s)" % (title, artists, source_name)
         else:
             activity['details'] = '空闲中'
         # Get player state and duration

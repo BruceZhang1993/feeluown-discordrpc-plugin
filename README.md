@@ -1,4 +1,4 @@
-# FeelUOwn Discord Rich Presence (For FeelUOwn v2.x)
+# FeelUOwn Discord Rich Presence
 这是一个实现 Discord RPC Rich Precense 服务的 FeelUOwn 插件
 
 ### 关于 What are these
@@ -7,16 +7,6 @@
 - [What is FeelUOwn](https://github.com/cosven/FeelUOwn)
 
 ### 食用攻略 Usage
-
-#### Git Version -- Recommand  
-
-1. 安装并第一次运行 FeelUOwn, 初始化文件夹
-2. 打开 Linux 终端并 `cd $HOME/.FeelUOwn/plugins`
-3. 安装插件 v2.x 分支开发版
-
-```shell
-git clone https://github.com/BruceZhang1993/feeluown-discordrpc-plugin.git feeluown_discordrpc
-```
 
 #### Release Version
 
@@ -29,6 +19,16 @@ cd /tmp
 wget https://github.com/BruceZhang1993/feeluown-discordrpc-plugin/archive/v0.0.1.tar.gz
 tar zxvf v0.0.1.tar.gz
 cp -r ./feeluown-discordrpc-plugin-0.0.1 $HOME/.FeelUOwn/plugins/feeluown-discordrpc-plugin
+```
+
+#### Git Version
+
+1. 安装并第一次运行 FeelUOwn, 初始化文件夹
+2. 打开 Linux 终端并 `cd $HOME/.FeelUOwn/plugins`
+3. 安装插件 v2.x 分支开发版
+
+```shell
+git clone https://github.com/BruceZhang1993/feeluown-discordrpc-plugin.git feeluown_discordrpc
 ```
 
 ### 插件更新 Upgrade
@@ -54,6 +54,5 @@ git pull origin master
 
 ### 开源协议 License
 
-FeelUOwn Discord Rich Presence Plugin: [MIT](https://github.com/BruceZhang1993/feeluown-discordrpc-plugin/blob/master/LICENSE)
-
-FeelUOwn: [GPL3](https://github.com/cosven/FeelUOwn/blob/master/LICENSE)
+- FeelUOwn Discord Rich Presence Plugin: [MIT](https://github.com/BruceZhang1993/feeluown-discordrpc-plugin/blob/master/LICENSE)
+- FeelUOwn: [GPL3](https://github.com/cosven/FeelUOwn/blob/master/LICENSE)
