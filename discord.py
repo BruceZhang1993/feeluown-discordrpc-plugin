@@ -3,11 +3,11 @@ import logging
 import asyncio
 import time
 
-from feeluown.app import CliApp
+from feeluown.app import App
 from fuocore.player import MpvPlayer as Player, State
 from fuocore.models import SongModel
 from PyQt5.QtCore import QObject
-from feeluown_discordrpc.rpc import DiscordIpcClient, DiscordIpcError
+from .rpc import DiscordIpcClient, DiscordIpcError
 
 logger = logging.getLogger(__name__)
 
