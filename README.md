@@ -56,6 +56,10 @@ git pull origin master
 
 ## 开源协议 License
 
-FeelUOwn Discord Rich Presence Plugin: [MIT](https://github.com/BruceZhang1993/feeluown-discordrpc-plugin/blob/master/LICENSE)
+### FeelUOwn Discord Rich Presence Plugin
 
-FeelUOwn: [GPL3](https://github.com/cosven/FeelUOwn/blob/master/LICENSE)
+[MIT](https://github.com/BruceZhang1993/feeluown-discordrpc-plugin/blob/master/LICENSE)
+
+### FeelUOwn
+
+[GPL3](https://github.com/cosven/FeelUOwn/blob/master/LICENSE)
